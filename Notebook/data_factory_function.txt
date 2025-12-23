@@ -1,0 +1,11 @@
+In the Fabric Data Factory pipeline, pipeline parameters are created to pass dynamic values into notebooks at runtime.
+
+-- We create two parameters: start_date and end_date.
+-- In the Value field of each parameter, we use Data Factory expression functions.
+  
+start_date = formatedatetime(adddats(utcnow(),-1),'yyyy-mm-dd')
+end_date = formatedatetime(utcnow(),'yyyy-mm-dd')
+
+utcNow() retrieves the current UTC date and time at pipeline execution.
+addDays(utcNow(), -1) calculates the previous day for incremental ingestion.
+formatDateTime() converts the datetime value into the required API-compatible date format.
