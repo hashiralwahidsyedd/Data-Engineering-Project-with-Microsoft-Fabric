@@ -120,12 +120,14 @@ The **Fabric Lakehouse** acts as the central data repository, combining the scal
 ### Orchestration (Fabric Data Factory)
 
 - Notebook activities for:
-  - Bronze ingestion
-  - Silver transformation
-  - Gold enrichment
+  - Bronze Notebook
+  - Silver Notebook
+  - Gold Notebook
 - Dynamic parameters passed into notebooks:
   - `start_date = utcnow() - 1 day`
   - `end_date = utcnow()`
+ 
+<img src="Doc/Lakehouse Data Pipeline.PNG" width="900"/>
 
 ### Capabilities
 
