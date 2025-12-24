@@ -1,0 +1,61 @@
+Step 1: Open Microsoft Fabric and click on Synapse Data Engineering.
+
+Step 2: Create a new workspace and give it the name “earthquake project”.
+
+Step 3: Inside the workspace, create a new Lakehouse. Make sure the experience is set to Data Engineering and name the Lakehouse “earthquake_lakehouse”.
+
+Step 4: Understand that this Lakehouse will act as the central data repository. It stores raw API data in the Bronze layer and cleaned, reporting-ready Delta tables in Silver and Gold layers. Delta is the default format and supports versioning, transactions, updates, merges, and rollback.
+
+Step 5: Note that you can switch between the Lakehouse view and the SQL Analytics endpoint to query data and perform EDA. A semantic model is automatically created and kept in sync.
+
+Step 6: Go to the USGS Earthquake Catalog API documentation and identify the API endpoint that supports starttime and endtime parameters.
+
+Step 7: Create a new notebook in the workspace, select language as PySpark, and attach the Lakehouse to the notebook.
+
+Step 8: In the notebook, use Python requests to call the USGS API. Pass the start and end date parameters in the URL.
+
+Step 9: From the API response, filter the “features” field, assign a file path in the Lakehouse Files area, and dump the raw data into a JSON file. This forms the Bronze layer.
+
+Step 10: Verify the file path by clicking the three dots on the file and copying the Lakehouse path.
+
+Step 11: Create a second notebook for the Silver layer. Read the Bronze JSON file into a Spark DataFrame.
+
+Step 12: Clean and transform the data by flattening nested fields, extracting coordinates, converting epoch timestamps to readable timestamp format, and selecting relevant columns.
+
+Step 13: Write the cleaned data into a Delta table named “earthquake_events_silver”.
+
+Step 14: Create a third notebook for the Gold layer. Read data from the Silver table and filter it for the required date range.
+
+Step 15: Enrich the data by adding country codes using reverse geocoding and classify earthquake significance as Low, Moderate, or High.
+
+Step 16: Write the enriched data into a Delta table named “earthquake_events_gold”.
+
+Step 17: Open Fabric Data Factory and create a new pipeline.
+
+Step 18: Add a Notebook activity and select the Bronze notebook from the correct workspace.
+
+Step 19: Create pipeline parameters named start_date and end_date.
+
+Step 20: In the parameter value fields, use Data Factory expressions:
+formatDateTime(addDays(utcNow(), -1), 'yyyy-MM-dd') for start_date and
+formatDateTime(utcNow(), 'yyyy-MM-dd') for end_date.
+
+Step 21: Pass these parameters into the notebook so the API fetches data for the previous day and current day automatically.
+
+Step 22: Add Silver and Gold notebook activities to the pipeline and connect them in sequence after the Bronze step.
+
+Step 23: Execute the pipeline to ingest, transform, and enrich earthquake data end to end.
+
+Step 24: Schedule the pipeline to run daily at a fixed time for automated ingestion.
+
+Step 25: Navigate back to the workspace and open the SQL Analytics endpoint created with the Lakehouse.
+
+Step 26: Go to the Report tab and manage the default semantic model.
+
+Step 27: Add the Gold table to the semantic model and publish it.
+
+Step 28: Create a blank Power BI report using the semantic model (Direct Lake).
+
+Step 29: Design a map-based Power BI report to visualize earthquake locations and severity.
+
+Step 30: Refresh the report to see new data automatically after each pipeline run.
